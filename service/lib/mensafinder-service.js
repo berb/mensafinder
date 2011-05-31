@@ -20,10 +20,10 @@ module.exports = (function(){
 	var readme = null;
 	
 	fs.readFile(path.join(__dirname, "..","..","api","mensafinder.html"), function (err, data) {
-		  if (!err){
+		if (!err){
 			readme = data;  
-		  } 
-		});
+		} 
+	});
 
 	var cache = Cache(1000*60*5);
 	var channel = Channel();
@@ -132,6 +132,9 @@ module.exports = (function(){
 				res.writeHead(404, HEADERS);
 				res.end('{"error":"not found"}');
 			}
+			
+			var logEntry = new Date().toUTCString()+" "+req.connection.remoteAddress+": "+req.method+" "+req.url;
+			console.log(logEntry);
 		}
 	}
 }());
