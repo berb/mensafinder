@@ -47,8 +47,6 @@ module.exports = function() {
 			dispatch(client);
 		});
 		
-		console.log("idx "+idx);
-		console.log("clientCount "+clientCount);
 	};
 	
 	return {
