@@ -1,5 +1,6 @@
 var http = require('http');
 var path = require("path");
+var fs = require("fs");
 
 var Cache = require(path.join(__dirname, "cache"));
 var Channel = require(path.join(__dirname, "channel"));
@@ -15,6 +16,14 @@ module.exports = (function(){
 		'Content-Type' : 'application/json',
 		'Server' : 'mensafinder/0.1.0' 
 	};
+	
+	var readme = null;
+	
+	fs.readFile(path.join(__dirname, "..","..","api","mensafinder.html"), function (err, data) {
+		  if (!err){
+			readme = data;  
+		  } 
+		});
 
 	var cache = Cache(1000*60*5);
 	var channel = Channel();
@@ -45,12 +54,14 @@ module.exports = (function(){
 	};
 	
 	var removePosition = function(user){
-		cache.remove(user);
-		channel.appendMessage({
-			"logout" : {
-				"user" : user
-			}
-		});
+		if(cache.get(user) !== null){
+			cache.remove(user);
+			channel.appendMessage({
+				"logout" : {
+					"user" : user
+				}
+			});
+		}
 	};
 	
 	
@@ -109,6 +120,13 @@ module.exports = (function(){
 			else if(remove.test(url) && req.method === 'DELETE'){
 				var result = remove.exec(url);
 				handleLogout(req,res, result[1]);				
+			}
+			else if(url === "/" && req.method === 'GET'){
+				res.writeHead(200, {
+					'Content-Type' : 'text/html',
+					'Server' : 'mensafinder/0.1.0' 
+				});
+				res.end(readme);				
 			}
 			else{
 				res.writeHead(404, HEADERS);
