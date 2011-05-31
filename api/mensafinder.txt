@@ -3,41 +3,68 @@ API DOCUMENTATION: Mensafinder API
 
 Author:		Benjamin Erb
 Version:	v1
-Base URI:	http://mensafinder.ioexception.de/
-Auth:		Basic Authentication
+Base URI:	http://mensafinder.ioexception.de
+Auth:		none
 
 
 Description
 ###########
 
-tbd.
+The Mensafinder service is a simple webservice that allows users to submit their orientation to a fixed location and receive orientation of other users.
+	A streaming implementation facilitates near-real-time proliferation of new orientations.
 
 
 Overview
 ########
 
-1 Bearing Queries
-	1.1 Get service instance data
+1 Orientation Queries
+	1.1 Get a live stream of new orientations
+	1.2 Get a snapshot of all orientations
 
-2 User Bearing
-	2.1 Remove bearing
-	2.2 Set/update user bearing
+2 User Orientation
+	2.1 Remove orientation
+	2.2 Set or update user orientation
 
 
 
-1. Bearing Queries
-##################
-URI:			http://mensafinder.ioexception.de//bearings
+1. Orientation Queries
+######################
+URI:			http://mensafinder.ioexception.de/orientations
 URI Params:
 
-These resources provide access to the bearings of the current users.
+These resources provide access to the orientation of the current users. The snapshot query lists all current entries, and a streaming query pushes changes to the client. The following request flow is recommended:
+			Language: plain
++----------------------------------------------------------------+
+   Client                      Mensafinder 
+
+     |                               |
+     |                               |
+     |   (1) GET ../snapshot         |
+     |------------------------------>|
+     |                               |
+     |   (2) 200 Snapshot (JSON)     |
+     |<------------------------------|
+     |                               |
+     |                               |
+     |   (3) GET ../stream           |
+     |------------------------------>|
+     |                               |
+     |   (4) 200 + event chunks      |
+     |<------------------------------|
+     |                               |
+     |                               |
+
++----------------------------------------------------------------+
+	
+Clients should first retrieve and parse a snapshot(1+2), and then apply changes by processing the push streams(3+4).
+			  
 
 
-1.1 Get service instance data
-=============================
-Returns a static information about the deployed Core service instance.
+1.1 Get a live stream of new orientations
+=========================================
+This request allows users to receive changes directly. Therefore, chunked encoding is used for the response and the connection must not be closed by the client prematurely. The server will keep open the connection and flush new events as response entity. Each event is a complete JSON struct and events are separated using a delimiter. If the client closes the connection, the request can be repeated. Note that this may cause the loss of events when re-establishing the conneciton.
 
-URI:			http://mensafinder.ioexception.de//bearings
+URI:			http://mensafinder.ioexception.de/orientations
 URI Params:
 
 Formats:		application/json 
@@ -52,28 +79,72 @@ RESPONSE
 --------
 
 Answers:
-			200 ("OK"):  Service instance data in response entity
+			200 ("OK"):  Service instance data in response entity			404 ("Not Found"):  Invalid request.
+Entities:
+Language: js
++----------------------------------------------------------------+{"update":{"user":"bastian","orientation":123}}
+
++----------------------------------------------------------------+
+
+Language: js
++----------------------------------------------------------------+{"update":{"user":"bastian","orientation":123}}
+{"update":{"user":"benjamin","orientation":165}}
+
++----------------------------------------------------------------+
+
+Language: js
++----------------------------------------------------------------+{"update":{"user":"bastian","orientation":123}}
+{"update":{"user":"benjamin","orientation":165}}
+{"update":{"user":"florian","orientation":120}}
+{"logout":{"user":"benjamin"}}
+{"update":{"user":"florian","orientation":127}}
+...
+
++----------------------------------------------------------------+
+
+
+
+1.2 Get a snapshot of all orientations
+======================================
+This request returns a list of all users that have recently submitted orientations. In addition to user name and orientation, an age value is returned. It represents the age of an entry in seconds.
+
+URI:			http://mensafinder.ioexception.de/orientations
+URI Params:
+
+Formats:		application/json 
+
+REQUEST
+-------
+
+Method:			GET
+Auth:			not required
+
+RESPONSE
+--------
+
+Answers:
+			200 ("OK"):  Incremental stream of events encoded as JSON structs.			404 ("Not Found"):  Invalid request.
 Entities:
 Language: js
 +----------------------------------------------------------------+{
-   "api":{
-      "name":"org.diretto.api.main.core",
-      "version":"v2"
-   },
-   "service":{
-      "name":"diretto Core API Node",
-      "version":"0.1.0"
-   },
-   "deployment":{
-      "title":"fubar diretto Deployment",
-      "contact":"mail@deployer",
-      "website":{
-         "link":{
-            "rel":"self",
-            "href":"http://www.diretto.org"
-         }
+   "time":"2011-05-31T14:24:34.020Z",
+   "list":[
+      {
+         "user":"florian",
+         "age":6,
+         "orientation":120
+      },
+      {
+         "user":"benjamin",
+         "age":4,
+         "orientation":165
+      },
+      {
+         "user":"bastian",
+         "age":2,
+         "orientation":123
       }
-   }
+   ]
 }
 +----------------------------------------------------------------+
 
@@ -81,20 +152,20 @@ Language: js
 
 
 
-2. User Bearing
-###############
-URI:			http://mensafinder.ioexception.de//user/{name}
+2. User Orientation
+###################
+URI:			http://mensafinder.ioexception.de/user/{name}/orientation
 URI Params:
 			{name}: alpha-numeric username, minimum 4, maximum 12 characters
 
-This resource represents the bearing of a specific user.
+This resource represents the orientation of a specific user. An orientation submitted to the service is valid for 5 minutes. When the orientation is not re-submitted within this interval, it will expire and be discarded.
 
 
-2.1 Remove bearing
-==================
-Returns a static information about the deployed Core service instance.
+2.1 Remove orientation
+======================
+This call removes the orientation of the user, signaling quit of the user. Users should use this operation for actively leaving the service and should not rely on expire times.
 
-URI:			http://mensafinder.ioexception.de//user/{name}
+URI:			http://mensafinder.ioexception.de/user/{name}/orientation
 URI Params:
 
 Formats:		application/json 
@@ -102,36 +173,36 @@ Formats:		application/json
 REQUEST
 -------
 
-Method:			GET
+Method:			DELETE
 Auth:			not required
 
 RESPONSE
 --------
 
 Answers:
-			200 ("OK"):  Service instance data in response entity
+			204 ("No Content"):  Orientation has been removed.			404 ("Not Found"):  Invalid request.
 
 
-2.2 Set/update user bearing
-===========================
-This call sets the current bearing of the user
+2.2 Set or update user orientation
+==================================
+This call sets the current orientation of the user. This call should only be dispatched when the user has a well-defined orientation. Please notice that a submission expires within 5 minutes, thus the request must be repeated if still valid.
 
-URI:			http://mensafinder.ioexception.de//user/{name}{degree}
+URI:			http://mensafinder.ioexception.de/user/{name}/orientation/{degree}
 URI Params:
-			{degree}: Bearing in degrees (integer between 0 and 360)
+			{degree}: Orientation in degrees (as integer between 0 and 360)
 
 Formats:		application/json 
 
 REQUEST
 -------
 
-Method:			GET
+Method:			PUT
 Auth:			not required
 
 RESPONSE
 --------
 
 Answers:
-			200 ("OK"):  Service instance data in response entity
+			202 ("Accepted"):  The orientation has been set.			404 ("Not Found"):  Invalid request.
 
 

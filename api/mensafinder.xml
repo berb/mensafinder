@@ -5,7 +5,8 @@
 	<name>Mensafinder API</name>
 	<version>v1</version>
 	<author>Benjamin Erb</author>
-	<description>tbd.</description>
+	<description>The Mensafinder service is a simple webservice that allows users to submit their orientation to a fixed location and receive orientation of other users.
+	A streaming implementation facilitates near-real-time proliferation of new orientations.</description>
 	<baseuri>http://mensafinder.ioexception.de</baseuri>
 
 	<authentication>
