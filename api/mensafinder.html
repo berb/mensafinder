@@ -1,0 +1,415 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<html xmlns:api="http://www.ioexception.de/rest-api-doc" xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<META http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<link href="http://alexgorbatchev.com/pub/sh/current/styles/shCore.css" rel="stylesheet" type="text/css">
+<link href="http://alexgorbatchev.com/pub/sh/current/styles/shThemeRDark.css" rel="stylesheet" type="text/css">
+<script src="http://alexgorbatchev.com/pub/sh/current/scripts/shCore.js" type="text/javascript"></script><script src="http://alexgorbatchev.com/pub/sh/current/scripts/shBrushJScript.js" type="text/javascript"></script><script src="http://alexgorbatchev.com/pub/sh/current/scripts/shBrushXml.js" type="text/javascript"></script><script src="http://alexgorbatchev.com/pub/sh/current/scripts/shBrushPlain.js" type="text/javascript"></script>
+<style type="text/css">
+			
+body {
+	background: #FFF;
+	color: #333;
+	font: normal 100% sans-serif;
+margin-left: auto;
+	margin-right: auto;
+
+	line-height: 1.5;
+	width:66%;
+}
+
+
+.uripart {
+	background:#666;
+	color: #fff;
+	font-style: italic;
+}
+
+
+h1,h2,h3,h4,h5,h6 {
+	color: #444;
+	font-weight: normal;
+	line-height: 1;
+	margin-bottom: 0.6em;
+	font-family:  Helvetica, sans-serif;
+
+}
+h4,h5,h6 {font-weight: bold;}
+
+h1 {font-size: 2.6em;}
+h2 {font-size: 2em;margin-top:3em;}
+h3 {font-size: 1.5em;margin-top:1.5em;}
+h4 {font-size: 1.25em;}
+h5 {font-size: 1.1em;}
+h6 {font-size: 1em;}
+
+h1 img, h2 img, h3 img, h4 img, h5 img, h6 img {margin: 0;}
+
+pre {
+	font: normal 100% monospace; 
+}
+
+
+dl { padding: 0.5em; } dt { background:#fff; float: left; clear: left; padding-left:0.3em; padding-right:0.3em;  text-align: right; }  dd { margin: 0 0 0 110px; padding: 0 0 0.5em 0; }
+
+.statuscode, .method {
+	font: bold 100% monospace; 
+}
+
+#watermark {
+        position:fixed; 
+        left:0px; 
+        top:0px;
+        width:32px;
+        height:100%;
+        background-color:#EEE;
+        padding:0px;
+        margin:0px;
+} 
+
+
+
+#watermark-text {
+	color:#999;
+	border:0px solid red;
+	writing-mode:tb-rl;
+	-webkit-transform:rotate(90deg);
+	-moz-transform:rotate(90deg);
+	-o-transform: rotate(90deg);
+	white-space:nowrap;
+	display:block;
+	bottom:0px;
+	width:20px;
+	height:20px;
+	font-family: Helvetica, sans-serif;
+	letter-spacing: 5px;
+	font-size:24px;
+	font-weight:normal;
+	text-shadow: 0px 0px 1px #999;
+	padding:0 10px 10px 5px;
+}
+
+#watermark-text span{
+	padding-left: 30px;
+}
+
+#sidemenu {
+z-index:300;  display:none;margin: 0;  text-align:left;
+}
+
+#sidemenu  li{
+	font-size: 0.8em;
+}
+#sidemenu  li a{
+	color: #333;
+	font-weight:bold;
+}
+
+#sidemenuopener{
+z-index:300; color: #333; background-color: #EEEEEE; border:1px solid #DDD; margin: 0;  position: fixed; top: 16px;  left: auto;  width: 56px;  right: 0px; text-align:center;
+min-height:32px;
+}
+
+#sidemenuopener a{
+	color: #333;
+	font-weight:bold;
+}
+
+a{
+	text-decoration: none;
+}
+
+#sidemenuopenerbox{
+	position: fixed; right:12px;
+}
+
+.shadow {
+	-moz-box-shadow: 2px 2px 3px #333;
+	-webkit-box-shadow: 2px 2px 3px #333;
+	box-shadow: 2px 2px 3px #333;
+	/* For IE 8 */
+	-ms-filter: "progid:DXImageTransform.Microsoft.Shadow(Strength=3, Direction=135, Color='#333333')";
+	/* For IE 5.5 - 7 */
+	filter: progid:DXImageTransform.Microsoft.Shadow(Strength=3, Direction=135, Color='#333333');
+	
+}
+
+
+			</style>
+<script type="text/javascript">
+					SyntaxHighlighter.all();
+			</script><script type="text/javascript">
+			function showElement(layer,sx,t1,t2){
+			var l = document.getElementById(layer);
+			var s = document.getElementById(sx);
+			if(l.style.display=="none"){
+			l.style.display="block";
+			l.backgroundPosition="top";
+			s.innerHTML= t2;
+			} else {
+			l.style.display="none";
+			s.innerHTML= t1;
+			}
+			}
+			
+			function boxSize(x,a,b){
+				var el = document.getElementById(x);
+				if(el.style.width === a){
+					el.style.width = b;
+				}
+				else{
+					el.style.width = a;
+				}
+			}
+			
+			</script>
+<title>Mensafinder API - RESTful API Documentation</title>
+</head>
+<body>
+<div id="watermark">
+<div id="watermark-text">
+<span>Mensafinder API</span><span>v1</span>
+</div>
+</div>
+<div id="sidemenuopener" class="shadow">
+<div id="sidemenuopenerbox">
+<a href="#" class="button" id="menuopener" onclick="javascript:showElement('sidemenu','menuopener','TOC','X'); boxSize('sidemenuopener','25%','56px'); return false;">TOC</a>
+</div>
+<ol id="sidemenu" style="display:none;">
+<li>
+<a id="lN65566" href="#" onclick="javascript:showElement('XN65566','lN65566','[+]','[-]'); return false;">
+						[+]
+					</a> <a href="#N65566">Orientation Queries</a>
+<ol id="XN65566" style="display:none;">
+<li>
+<a href="#N65634">Get a live stream of new orientations</a>
+</li>
+<li>
+<a href="#N65581">Get a snapshot of all orientations</a>
+</li>
+</ol>
+</li>
+<li>
+<a id="lN65717" href="#" onclick="javascript:showElement('XN65717','lN65717','[+]','[-]'); return false;">
+						[+]
+					</a> <a href="#N65717">User Orientation</a>
+<ol id="XN65717" style="display:none;">
+<li>
+<a href="#N65779">Remove orientation</a>
+</li>
+<li>
+<a href="#N65732">Set or update user orientation</a>
+</li>
+</ol>
+</li>
+</ol>
+</div>
+<h1>Mensafinder API</h1>
+<a name="introduction"></a>
+<h2>Introduction</h2>
+<h4>Version</h4>
+<p>v1</p>
+<h4>Author</h4>
+<p>Benjamin Erb</p>
+<h4>Description</h4>
+<p>tbd.</p>
+<h4>Authentication Schemes</h4>
+<p>
+<ul>
+<li>none</li>
+</ul>
+</p>
+<h4>Base URI</h4>
+<p>
+<a xmlns="" href="http://mensafinder.ioexception.de">http://mensafinder.ioexception.de</a>
+</p>
+<a name="index"></a>
+<h2>Index of Resources and Operations</h2>
+<ol>
+<li xmlns="http://www.w3.org/1999/xhtml">
+<a href="#N65566">Orientation Queries</a>
+<ol>
+<li>
+<a href="#N65634">Get a live stream of new orientations</a>
+</li>
+<li>
+<a href="#N65581">Get a snapshot of all orientations</a>
+</li>
+</ol>
+</li>
+<li>
+<a href="#N65717">User Orientation</a>
+<ol>
+<li>
+<a href="#N65779">Remove orientation</a>
+</li>
+<li>
+<a href="#N65732">Set or update user orientation</a>
+</li>
+</ol>
+</li>
+</ol>
+<a xmlns="" name="N65566"></a>
+<h2 class="resource">1. Orientation Queries</h2>
+<h4>Description</h4>
+<p>These resources provide access to the orientation of the current users. The snapshot query lists all current entries, and a streaming query pushes changes to the client. The following request flow is recommended:
+			<pre class="brush: plain">
+   Client                      Mensafinder 
+
+     |                               |
+     |                               |
+     |   (1) GET ../snapshot         |
+     |------------------------------&gt;|
+     |                               |
+     |   (2) 200 Snapshot (JSON)     |
+     |&lt;------------------------------|
+     |                               |
+     |                               |
+     |   (3) GET ../stream           |
+     |------------------------------&gt;|
+     |                               |
+     |   (4) 200 + event chunks      |
+     |&lt;------------------------------|
+     |                               |
+     |                               |
+</pre>	
+Clients should first retrieve and parse a snapshot(1+2), and then apply changes by processing the push streams(3+4).
+			  </p>
+<h4>Resource URI</h4>
+<pre>http://mensafinder.ioexception.de/orientations</pre>
+<dl></dl>
+<a name="N65634"></a>
+<h3 class="operation">1.1 Get a live stream of new orientations</h3>
+<h4>Description</h4>This request allows users to receive changes directly. Therefore, chunked encoding is used for the response and the connection must not be closed by the client prematurely. The server will keep open the connection and flush new events as response entity. Each event is a complete JSON struct and events are separated using a delimiter. If the client closes the connection, the request can be repeated. Note that this may cause the loss of events when re-establishing the conneciton.<h4>URI</h4>
+<pre>http://mensafinder.ioexception.de/orientations</pre>
+<h4>URI Parameters</h4>n/a<h4>HTTP Method</h4>
+<span class="method">GET</span>
+<h4>Resource Formats</h4>
+<ul>
+<li>application/json</li>
+</ul>
+<h4>Authentication</h4>not required<h4>Request Entities</h4>n/a<h4>Responses</h4>
+<dl>
+<dt class="statuscode">200 OK</dt>
+<dd>Service instance data in response entity</dd>
+<dt class="statuscode">404 Not Found</dt>
+<dd>Invalid request.</dd>
+</dl>
+<h4>Response Entities</h4>
+						
+
+<pre class="brush: js">{"update":{"user":"bastian","orientation":123}}
+</pre>
+						The response is a set of events represented as JSON objects, that will be pushed by the server on-the-fly. JSON objects are separated using <span style="font-family:monospace;">\r\n</span> as delimiter. Thus, each response line represents exactly one JSON struct.  
+						This sequence of characters will not be part of any regular event message. 
+						
+						
+<pre class="brush: js">{"update":{"user":"bastian","orientation":123}}
+{"update":{"user":"benjamin","orientation":165}}
+</pre>
+						As soon as a new event happen, the server will append the additional JSON struct to the response.
+						
+						
+<pre class="brush: js">{"update":{"user":"bastian","orientation":123}}
+{"update":{"user":"benjamin","orientation":165}}
+{"update":{"user":"florian","orientation":120}}
+{"logout":{"user":"benjamin"}}
+{"update":{"user":"florian","orientation":127}}
+...
+</pre>
+						There are two different kinds of events. <span style="font-family:monospace;">update</span> events occur, when a user submits a new orientation. <span style="font-family:monospace;">logout</span> events are triggered when a user removes his orientation. Please notice that timeouts will not be streamed as events.
+						
+					<a name="N65581"></a>
+<h3 class="operation">1.2 Get a snapshot of all orientations</h3>
+<h4>Description</h4>This request returns a list of all users that have recently submitted orientations. In addition to user name and orientation, an age value is returned. It represents the age of an entry in seconds.<h4>URI</h4>
+<pre>http://mensafinder.ioexception.de/orientations</pre>
+<h4>URI Parameters</h4>n/a<h4>HTTP Method</h4>
+<span class="method">GET</span>
+<h4>Resource Formats</h4>
+<ul>
+<li>application/json</li>
+</ul>
+<h4>Authentication</h4>not required<h4>Request Entities</h4>n/a<h4>Responses</h4>
+<dl>
+<dt class="statuscode">200 OK</dt>
+<dd>Incremental stream of events encoded as JSON structs.</dd>
+<dt class="statuscode">404 Not Found</dt>
+<dd>Invalid request.</dd>
+</dl>
+<h4>Response Entities</h4>
+						
+
+<pre class="brush: js">{
+   "time":"2011-05-31T14:24:34.020Z",
+   "list":[
+      {
+         "user":"florian",
+         "age":6,
+         "orientation":120
+      },
+      {
+         "user":"benjamin",
+         "age":4,
+         "orientation":165
+      },
+      {
+         "user":"bastian",
+         "age":2,
+         "orientation":123
+      }
+   ]
+}</pre>
+						The JSON response contains a server-based timestamp and a list of available entries. Each entry lists a user name, an age value and an orientation value. The age value represents the age of this entry in seconds. The orientation value is the bearing submitted by the user.
+						
+					<a name="N65717"></a>
+<h2 class="resource">2. User Orientation</h2>
+<h4>Description</h4>
+<p>This resource represents the orientation of a specific user. An orientation submitted to the service is valid for 5 minutes. When the orientation is not re-submitted within this interval, it will expire and be discarded.</p>
+<h4>Resource URI</h4>
+<pre>http://mensafinder.ioexception.de/user/<span class="uripart">{name}</span>/orientation</pre>
+<dl>
+<dt class="uripart">name</dt>
+<dd>alpha-numeric username, minimum 4, maximum 12 characters</dd>
+</dl>
+<a name="N65779"></a>
+<h3 class="operation">2.1 Remove orientation</h3>
+<h4>Description</h4>This call removes the orientation of the user, signaling quit of the user. Users should use this operation for actively leaving the service and should not rely on expire times.<h4>URI</h4>
+<pre>http://mensafinder.ioexception.de/user/{name}/orientation</pre>
+<h4>URI Parameters</h4>n/a<h4>HTTP Method</h4>
+<span class="method">DELETE</span>
+<h4>Resource Formats</h4>
+<ul>
+<li>application/json</li>
+</ul>
+<h4>Authentication</h4>not required<h4>Request Entities</h4>n/a<h4>Responses</h4>
+<dl>
+<dt class="statuscode">204 No Content</dt>
+<dd>Orientation has been removed.</dd>
+<dt class="statuscode">404 Not Found</dt>
+<dd>Invalid request.</dd>
+</dl>
+<h4>Response Entities</h4>n/a<a name="N65732"></a>
+<h3 class="operation">2.2 Set or update user orientation</h3>
+<h4>Description</h4>This call sets the current orientation of the user. This call should only be dispatched when the user has a well-defined orientation. Please notice that a submission expires within 5 minutes, thus the request must be repeated if still valid.<h4>URI</h4>
+<pre>http://mensafinder.ioexception.de/user/{name}/orientation/<span class="uripart">{degree}</span>
+</pre>
+<h4>URI Parameters</h4>
+<dl>
+<dt class="uripart">{degree}</dt>
+<dd>Orientation in degrees (as integer between 0 and 360)</dd>
+</dl>
+<h4>HTTP Method</h4>
+<span class="method">PUT</span>
+<h4>Resource Formats</h4>
+<ul>
+<li>application/json</li>
+</ul>
+<h4>Authentication</h4>not required<h4>Request Entities</h4>n/a<h4>Responses</h4>
+<dl>
+<dt class="statuscode">202 Accepted</dt>
+<dd>The orientation has been set.</dd>
+<dt class="statuscode">404 Not Found</dt>
+<dd>Invalid request.</dd>
+</dl>
+<h4>Response Entities</h4>n/a</body>
+</html>

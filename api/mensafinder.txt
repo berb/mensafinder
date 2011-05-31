@@ -1,0 +1,137 @@
+API DOCUMENTATION: Mensafinder API
+==================================
+
+Author:		Benjamin Erb
+Version:	v1
+Base URI:	http://mensafinder.ioexception.de/
+Auth:		Basic Authentication
+
+
+Description
+###########
+
+tbd.
+
+
+Overview
+########
+
+1 Bearing Queries
+	1.1 Get service instance data
+
+2 User Bearing
+	2.1 Remove bearing
+	2.2 Set/update user bearing
+
+
+
+1. Bearing Queries
+##################
+URI:			http://mensafinder.ioexception.de//bearings
+URI Params:
+
+These resources provide access to the bearings of the current users.
+
+
+1.1 Get service instance data
+=============================
+Returns a static information about the deployed Core service instance.
+
+URI:			http://mensafinder.ioexception.de//bearings
+URI Params:
+
+Formats:		application/json 
+
+REQUEST
+-------
+
+Method:			GET
+Auth:			not required
+
+RESPONSE
+--------
+
+Answers:
+			200 ("OK"):  Service instance data in response entity
+Entities:
+Language: js
++----------------------------------------------------------------+{
+   "api":{
+      "name":"org.diretto.api.main.core",
+      "version":"v2"
+   },
+   "service":{
+      "name":"diretto Core API Node",
+      "version":"0.1.0"
+   },
+   "deployment":{
+      "title":"fubar diretto Deployment",
+      "contact":"mail@deployer",
+      "website":{
+         "link":{
+            "rel":"self",
+            "href":"http://www.diretto.org"
+         }
+      }
+   }
+}
++----------------------------------------------------------------+
+
+
+
+
+
+2. User Bearing
+###############
+URI:			http://mensafinder.ioexception.de//user/{name}
+URI Params:
+			{name}: alpha-numeric username, minimum 4, maximum 12 characters
+
+This resource represents the bearing of a specific user.
+
+
+2.1 Remove bearing
+==================
+Returns a static information about the deployed Core service instance.
+
+URI:			http://mensafinder.ioexception.de//user/{name}
+URI Params:
+
+Formats:		application/json 
+
+REQUEST
+-------
+
+Method:			GET
+Auth:			not required
+
+RESPONSE
+--------
+
+Answers:
+			200 ("OK"):  Service instance data in response entity
+
+
+2.2 Set/update user bearing
+===========================
+This call sets the current bearing of the user
+
+URI:			http://mensafinder.ioexception.de//user/{name}{degree}
+URI Params:
+			{degree}: Bearing in degrees (integer between 0 and 360)
+
+Formats:		application/json 
+
+REQUEST
+-------
+
+Method:			GET
+Auth:			not required
+
+RESPONSE
+--------
+
+Answers:
+			200 ("OK"):  Service instance data in response entity
+
+

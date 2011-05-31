@@ -182,6 +182,7 @@
 			<xsd:enumeration value="Basic Authentication" />
 			<xsd:enumeration value="Digest Authentication" />
 			<xsd:enumeration value="OAuth" />
+			<xsd:enumeration value="none" />
 		</xsd:restriction>
 	</xsd:simpleType>
 
