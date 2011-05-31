@@ -182,7 +182,7 @@ a{
 					</a> <a href="#N65566">Orientation Queries</a>
 <ol id="XN65566" style="display:none;">
 <li>
-<a href="#N65634">Get a live stream of new orientations</a>
+<a href="#N65635">Get a live stream of new orientations</a>
 </li>
 <li>
 <a href="#N65581">Get a snapshot of all orientations</a>
@@ -190,15 +190,15 @@ a{
 </ol>
 </li>
 <li>
-<a id="lN65717" href="#" onclick="javascript:showElement('XN65717','lN65717','[+]','[-]'); return false;">
+<a id="lN65719" href="#" onclick="javascript:showElement('XN65719','lN65719','[+]','[-]'); return false;">
 						[+]
-					</a> <a href="#N65717">User Orientation</a>
-<ol id="XN65717" style="display:none;">
+					</a> <a href="#N65719">User Orientation</a>
+<ol id="XN65719" style="display:none;">
 <li>
-<a href="#N65779">Remove orientation</a>
+<a href="#N65781">Remove orientation</a>
 </li>
 <li>
-<a href="#N65732">Set or update user orientation</a>
+<a href="#N65734">Set or update user orientation</a>
 </li>
 </ol>
 </li>
@@ -231,7 +231,7 @@ a{
 <a href="#N65566">Orientation Queries</a>
 <ol>
 <li>
-<a href="#N65634">Get a live stream of new orientations</a>
+<a href="#N65635">Get a live stream of new orientations</a>
 </li>
 <li>
 <a href="#N65581">Get a snapshot of all orientations</a>
@@ -239,13 +239,13 @@ a{
 </ol>
 </li>
 <li>
-<a href="#N65717">User Orientation</a>
+<a href="#N65719">User Orientation</a>
 <ol>
 <li>
-<a href="#N65779">Remove orientation</a>
+<a href="#N65781">Remove orientation</a>
 </li>
 <li>
-<a href="#N65732">Set or update user orientation</a>
+<a href="#N65734">Set or update user orientation</a>
 </li>
 </ol>
 </li>
@@ -279,10 +279,10 @@ Clients should first retrieve and parse a snapshot(1+2), and then apply changes 
 <h4>Resource URI</h4>
 <pre>http://mensafinder.ioexception.de/orientations</pre>
 <dl></dl>
-<a name="N65634"></a>
+<a name="N65635"></a>
 <h3 class="operation">1.1 Get a live stream of new orientations</h3>
 <h4>Description</h4>This request allows users to receive changes directly. Therefore, chunked encoding is used for the response and the connection must not be closed by the client prematurely. The server will keep open the connection and flush new events as response entity. Each event is a complete JSON struct and events are separated using a delimiter. If the client closes the connection, the request can be repeated. Note that this may cause the loss of events when re-establishing the conneciton.<h4>URI</h4>
-<pre>http://mensafinder.ioexception.de/orientations</pre>
+<pre>http://mensafinder.ioexception.de/orientations/stream</pre>
 <h4>URI Parameters</h4>n/a<h4>HTTP Method</h4>
 <span class="method">GET</span>
 <h4>Resource Formats</h4>
@@ -323,7 +323,7 @@ Clients should first retrieve and parse a snapshot(1+2), and then apply changes 
 					<a name="N65581"></a>
 <h3 class="operation">1.2 Get a snapshot of all orientations</h3>
 <h4>Description</h4>This request returns a list of all users that have recently submitted orientations. In addition to user name and orientation, an age value is returned. It represents the age of an entry in seconds.<h4>URI</h4>
-<pre>http://mensafinder.ioexception.de/orientations</pre>
+<pre>http://mensafinder.ioexception.de/orientations/snapshot</pre>
 <h4>URI Parameters</h4>n/a<h4>HTTP Method</h4>
 <span class="method">GET</span>
 <h4>Resource Formats</h4>
@@ -362,7 +362,7 @@ Clients should first retrieve and parse a snapshot(1+2), and then apply changes 
 }</pre>
 						The JSON response contains a server-based timestamp and a list of available entries. Each entry lists a user name, an age value and an orientation value. The age value represents the age of this entry in seconds. The orientation value is the bearing submitted by the user.
 						
-					<a name="N65717"></a>
+					<a name="N65719"></a>
 <h2 class="resource">2. User Orientation</h2>
 <h4>Description</h4>
 <p>This resource represents the orientation of a specific user. An orientation submitted to the service is valid for 5 minutes. When the orientation is not re-submitted within this interval, it will expire and be discarded.</p>
@@ -372,7 +372,7 @@ Clients should first retrieve and parse a snapshot(1+2), and then apply changes 
 <dt class="uripart">name</dt>
 <dd>alpha-numeric username, minimum 4, maximum 12 characters</dd>
 </dl>
-<a name="N65779"></a>
+<a name="N65781"></a>
 <h3 class="operation">2.1 Remove orientation</h3>
 <h4>Description</h4>This call removes the orientation of the user, signaling quit of the user. Users should use this operation for actively leaving the service and should not rely on expire times.<h4>URI</h4>
 <pre>http://mensafinder.ioexception.de/user/{name}/orientation</pre>
@@ -389,7 +389,7 @@ Clients should first retrieve and parse a snapshot(1+2), and then apply changes 
 <dt class="statuscode">404 Not Found</dt>
 <dd>Invalid request.</dd>
 </dl>
-<h4>Response Entities</h4>n/a<a name="N65732"></a>
+<h4>Response Entities</h4>n/a<a name="N65734"></a>
 <h3 class="operation">2.2 Set or update user orientation</h3>
 <h4>Description</h4>This call sets the current orientation of the user. This call should only be dispatched when the user has a well-defined orientation. Please notice that a submission expires within 5 minutes, thus the request must be repeated if still valid.<h4>URI</h4>
 <pre>http://mensafinder.ioexception.de/user/{name}/orientation/<span class="uripart">{degree}</span>

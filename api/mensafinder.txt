@@ -64,7 +64,7 @@ Clients should first retrieve and parse a snapshot(1+2), and then apply changes 
 =========================================
 This request allows users to receive changes directly. Therefore, chunked encoding is used for the response and the connection must not be closed by the client prematurely. The server will keep open the connection and flush new events as response entity. Each event is a complete JSON struct and events are separated using a delimiter. If the client closes the connection, the request can be repeated. Note that this may cause the loss of events when re-establishing the conneciton.
 
-URI:			http://mensafinder.ioexception.de/orientations
+URI:			http://mensafinder.ioexception.de/orientations/stream
 URI Params:
 
 Formats:		application/json 
@@ -108,7 +108,7 @@ Language: js
 ======================================
 This request returns a list of all users that have recently submitted orientations. In addition to user name and orientation, an age value is returned. It represents the age of an entry in seconds.
 
-URI:			http://mensafinder.ioexception.de/orientations
+URI:			http://mensafinder.ioexception.de/orientations/snapshot
 URI Params:
 
 Formats:		application/json 
